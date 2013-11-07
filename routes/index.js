@@ -39,8 +39,11 @@ var routes = function(){
             if(existing != null){
                 var i = _.indexOf(puppies, existing);
                 puppies[i] = puppy;
+                res.json('Puppy Has Been Updated');
             }else{
+                puppy._id = puppies.length + 1;  //ghetto PK
                 puppies.push(puppy);
+                res.json('Puppy Has Been Created');
             }
         });
 
@@ -48,6 +51,7 @@ var routes = function(){
             puppies = _.reject(puppies, function(puppy){
                 return puppy._id == req.params.id;
             });
+            res.json('Puppy Has Been Deleted');
         });
 
     };

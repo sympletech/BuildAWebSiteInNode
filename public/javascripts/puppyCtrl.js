@@ -2,14 +2,13 @@ function puppyCtrl($scope, $http){
     $scope.puppies = [];
 
     $scope.loadPuppies = function(){
-        $scope.puppies.push({_id:1, name : 'Koda', breed : 'Siberian Husky', age : '4'});
-        $scope.puppies.push({_id:2, name : 'Yoda', breed : 'German Shepard', age : '6'});
-        $scope.puppies.push({_id:3, name : 'Ginger', breed : 'Pound Puppy', age : '10'});
-        $scope.puppies.push({_id:4, name : 'Dora', breed : 'Dingo', age : '5'});
+        $http.get('/puppyApi').success(function(data){
+            $scope.puppies = data;
+        });
     };
     $scope.loadPuppies();
 
-    $scope.puppyForm = {};;
+    $scope.puppyForm = {};
     var resetForm = function(){
         $scope.puppyForm = {
             _id : '',
@@ -21,26 +20,21 @@ function puppyCtrl($scope, $http){
     resetForm();
 
     $scope.editPuppy = function(puppy){
-        $scope.puppyForm = angular.copy(puppy);
+        $http.get('/puppyApi/' + puppy._id).success(function(data){
+            $scope.puppyForm = data;
+        });
     };
 
     $scope.deletePuppy = function(puppy){
-        $scope.puppies = _.reject($scope.puppies, function(p){
-            return p._id === puppy._id;
+        $http.delete('/puppyApi/' + puppy._id).success(function(data){
+            $scope.loadPuppies();
         });
     };
 
     $scope.submitForm = function(){
-        var existing = _.find($scope.puppies, function(p){
-            return p._id == $scope.puppyForm._id;
+        $http.post('/puppyApi/', $scope.puppyForm).success(function(data){
+            $scope.loadPuppies();
+            resetForm();
         });
-
-        if(existing != null){
-            var i = _.indexOf($scope.puppies, existing);
-            $scope.puppies[i] = angular.copy($scope.puppyForm);
-        }else{
-            $scope.puppies.push(angular.copy($scope.puppyForm));
-        }
-        resetForm();
     };
 }
