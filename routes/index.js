@@ -1,6 +1,7 @@
 var routes = function(){
 
-    var _ = require('underscore');
+    var _ = require('underscore'),
+        db = require('../data/db');
 
     this.RegisterAppRoutes = function(app){
         app.get('/', function(req, res){
@@ -9,49 +10,44 @@ var routes = function(){
 
         //Puppy API
         //******************************************
-        var puppies = [
-            {_id: 1, name : 'Koda', breed : 'Siberian Husky', age : '4'},
-            {_id: 2, name : 'Yoda', breed : 'German Shepard', age : '6'},
-            {_id: 3, name : 'Ginger', breed : 'Pound Puppy', age : '10'},
-            {_id: 4, name : 'Dora', breed : 'Dingo', age : '5'}
-        ];
 
         //All Puppies
         app.get('/puppyApi', function(req,res){
-            res.json(puppies);
+            db.puppyModel.find(function(err, puppies){
+                res.json(puppies);
+            });
         });
 
         //Return A Puppy
         app.get('/puppyApi/:id', function(req,res){
-            var result = _.find(puppies, function(puppy){
-                return puppy._id == req.params.id;
+            db.puppyModel.findOne({_id : req.params.id }, function(err, puppy ){
+                res.json(puppy);
             });
-            res.json(result);
         });
 
-
         app.post('/puppyApi', function(req,res){
-            var puppy = req.body;
-            var existing = _.find(puppies, function(puppy){
-                return puppy._id == req.body._id;
-            });
+            db.puppyModel.findOne({_id : req.body._id }, function(err, puppy ){
+                var newPuppy = false;
+                if(puppy == null){
+                    puppy = new db.puppyModel();
+                    newPuppy = true;
+                }
+                puppy.name = req.body.name;
+                puppy.breed = req.body.breed;
+                puppy.age = req.body.age;
 
-            if(existing != null){
-                var i = _.indexOf(puppies, existing);
-                puppies[i] = puppy;
-                res.json('Puppy Has Been Updated');
-            }else{
-                puppy._id = puppies.length + 1;  //ghetto PK
-                puppies.push(puppy);
-                res.json('Puppy Has Been Created');
-            }
+                puppy.save(function(err, p){
+                    res.json(newPuppy ? 'Puppy Has Been Created' : 'Puppy Has Been Updated' );
+                });
+            });
         });
 
         app.delete('/puppyApi/:id', function(req,res){
-            puppies = _.reject(puppies, function(puppy){
-                return puppy._id == req.params.id;
+            db.puppyModel.findOne({_id : req.params.id }, function(err, puppy ){
+                puppy.remove(function(err){
+                    res.json('Puppy Has Been Deleted');
+                });
             });
-            res.json('Puppy Has Been Deleted');
         });
 
     };
