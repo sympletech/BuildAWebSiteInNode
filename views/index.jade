@@ -1,46 +1,49 @@
 extends layout
 
+block scripts
+    script(src='/javascripts/puppyCtrl.js')
+
 block content
-    h1 How About Them Puppies?
+    div(ng-controller='puppyCtrl')
+        h1 How About Them Puppies?
 
-    //Data Table
-    table.table.table-striped.dog-table
-        thead
-            tr
-                th Name
-                th Breed
-                th Age
-                th
-        tbody
-            - for (var i=0; i<5; i++)
+        //Data Table
+        table.table.table-striped.dog-table
+            thead
                 tr
-                    td Dog Name
-                    td Dog Breed
-                    td Dog Age
+                    th Name
+                    th Breed
+                    th Age
+                    th
+            tbody
+                tr(ng-repeat="puppy in puppies")
+                    td {{puppy.name}}
+                    td {{puppy.breed}}
+                    td {{puppy.age}}
                     td
-                        i.glyphicon.glyphicon-edit
-                        i.glyphicon.glyphicon-remove-circle
+                        i.glyphicon.glyphicon-edit(ng-click="editPuppy(puppy)")
+                        i.glyphicon.glyphicon-remove-circle(ng-click="deletePuppy(puppy)")
 
 
-    //Edit Form
-    div.row
-        div.col-sm-3
-        div.col-sm-6
-            div.panel.panel-default
-                div.panel-heading Add A Puppy
-                div.panel-body
-                    form.form-horizontal.edit-form(role="form")
-                        div.form-group
-                            label.col-sm-2.control-label Name
-                            div.col-sm-10
-                                input.form-control(placeholder="Dog's Name")
-                        div.form-group
-                            label.col-sm-2.control-label Breed
-                            div.col-sm-10
-                                input.form-control(placeholder="Dog's Breed")
-                        div.form-group
-                            label.col-sm-2.control-label Age
-                            div.col-sm-10
-                                input.form-control(placeholder="Dog's Age")
-                        center
-                            button.btn.btn-primary.text-center Submit Puppy
+        //Edit Form
+        div.row
+            div.col-sm-3
+            div.col-sm-6
+                div.panel.panel-default
+                    div.panel-heading Add A Puppy
+                    div.panel-body
+                        form.form-horizontal.edit-form(role="form")
+                            div.form-group
+                                label.col-sm-2.control-label Name
+                                div.col-sm-10
+                                    input.form-control(placeholder="Dog's Name", ng-model="puppyForm.name", required)
+                            div.form-group
+                                label.col-sm-2.control-label Breed
+                                div.col-sm-10
+                                    input.form-control(placeholder="Dog's Breed", ng-model="puppyForm.breed", required)
+                            div.form-group
+                                label.col-sm-2.control-label Age
+                                div.col-sm-10
+                                    input.form-control(placeholder="Dog's Age", ng-model="puppyForm.age", required)
+                            center
+                                button.btn.btn-primary.text-center(ng-click="submitForm()") Submit Puppy
