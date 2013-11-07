@@ -1,19 +1,25 @@
 doctype 5
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/libraries/twitter-bootstrap-3.0/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-
+    head
+        title= title
+        link(rel='stylesheet', href='/libraries/twitter-bootstrap-3.0/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
     block head
-  body(ng-app)
-    img(src="/images/nodejs.png")
-  div.row
-    div.col-sm-2
-    div.col-sm-8
-        div.content
-            block content
-    div.col-sm-2
+
+    body(ng-app)
+        img(src="/images/nodejs.png")
+
+    if user
+        div.pull-right.alert.alert-success.text-center.container
+            p= user.displayName
+            a(href='/logout') Logout
+
+    div.row
+        div.col-sm-2
+        div.col-sm-8
+            div.content
+                block content
+        div.col-sm-2
 
 
 

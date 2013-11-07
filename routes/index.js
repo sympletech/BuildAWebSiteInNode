@@ -1,11 +1,43 @@
 var routes = function(){
 
     var _ = require('underscore'),
-        db = require('../data/db');
+        db = require('../data/db'),
+        app = require('../app'),
+        passport = require('passport');
+
+    function securedRoute() {
+        return function(req, res, next) {
+            if(req.user)
+                next();
+            else
+                res.redirect('/login');
+        }
+    }
 
     this.RegisterAppRoutes = function(app){
-        app.get('/', function(req, res){
-            res.render('index', { title: 'An Introduction to building a website in Node.js' });
+        app.get('/',
+            securedRoute(),
+            function(req, res){
+                res.render('index', { title: 'An Introduction to building a website in Node.js', user : req.user  });
+        });
+
+        //Login
+        //******************************************
+
+        app.get('/login', function(req, res){
+            res.render('login', {title : 'Please Login'});
+        });
+
+        app.get('/login/twitter', passport.authenticate('twitter'));
+
+        app.get('/login/twitter/callback',
+            passport.authenticate('twitter', { successRedirect: '/',
+                failureRedirect: '/login' }));
+
+        app.get('/logout', function(req, res){
+            req.session.destroy();
+            req.user = null;
+            res.redirect('/login');
         });
 
         //Puppy API

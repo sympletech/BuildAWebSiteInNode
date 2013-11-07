@@ -10,6 +10,12 @@ var db = function(){
         age : Number
     });
 
+    self.userModel = mongoose.model('user',{
+        twitterId : Number,
+        username : String,
+        displayName : String
+    });
+
 };
 
 module.exports = new db();

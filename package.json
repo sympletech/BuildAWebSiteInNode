@@ -9,6 +9,8 @@
     "express": "3.4.0",
     "jade": "*",
     "mongoose": "~3.6.20",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "passport": "~0.1.17",
+    "passport-twitter": "~1.0.2"
   }
 }
