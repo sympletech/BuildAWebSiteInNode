@@ -1,5 +1,46 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1 How About Them Puppies?
+
+    //Data Table
+    table.table.table-striped.dog-table
+        thead
+            tr
+                th Name
+                th Breed
+                th Age
+                th
+        tbody
+            - for (var i=0; i<5; i++)
+                tr
+                    td Dog Name
+                    td Dog Breed
+                    td Dog Age
+                    td
+                        i.glyphicon.glyphicon-edit
+                        i.glyphicon.glyphicon-remove-circle
+
+
+    //Edit Form
+    div.row
+        div.col-sm-3
+        div.col-sm-6
+            div.panel.panel-default
+                div.panel-heading Add A Puppy
+                div.panel-body
+                    form.form-horizontal.edit-form(role="form")
+                        div.form-group
+                            label.col-sm-2.control-label Name
+                            div.col-sm-10
+                                input.form-control(placeholder="Dog's Name")
+                        div.form-group
+                            label.col-sm-2.control-label Breed
+                            div.col-sm-10
+                                input.form-control(placeholder="Dog's Breed")
+                        div.form-group
+                            label.col-sm-2.control-label Age
+                            div.col-sm-10
+                                input.form-control(placeholder="Dog's Age")
+                        center
+                            button.btn.btn-primary.text-center Submit Puppy

@@ -14,3 +14,10 @@ a {
     padding: 10px;
     min-height: 300px;
 }
+
+.dog-table i{
+    padding : 5px;
+    cursor: pointer;
+
+}
+
